@@ -1,0 +1,8 @@
+{% block content %}
+<h1>Leaderboard</h1>
+<ol>
+  {% for profile in top_users %}
+  <li>{{ profile.user.username }}: {{ profile.best_score }} points</li>
+  {% endfor %}
+</ol>
+{% endblock %}

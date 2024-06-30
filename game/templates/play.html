@@ -1,0 +1,17 @@
+{% block content %}
+<h1>Who Wants to Be a Millionaire?</h1>
+<form method="post">
+  {% csrf_token %} {% for question in questions %}
+  <h3>{{ question.text }} ({{ question.points }} points)</h3>
+  {% for answer in question.answers.all %}
+  <input
+    type="radio"
+    name="question_{{ question.id }}"
+    value="{{ answer.id }}"
+    required
+  />
+  {{ answer.text }}<br />
+  {% endfor %} {% endfor %}
+  <input type="submit" value="Submit Answers" />
+</form>
+{% endblock %}

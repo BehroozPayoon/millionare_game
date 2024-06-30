@@ -20,15 +20,17 @@ def play(request):
         if score > profile.best_score:
             profile.best_score = score
             profile.save()
+
+        return render(request, 'result.html', {'score': score})
     else:
         questions = list(Question.objects.all())
         game_questions = random.sample(questions, min(5, len(questions)))
-        return render(request, 'game/play.html', {'questions': game_questions})
+        return render(request, 'play.html', {'questions': game_questions})
 
 
 def leaderboard(request):
     top_users = UserProfile.objects.order_by('-best_score')[:10]
-    return render(request, 'game/leaderboard.html', {'top_users': top_users})
+    return render(request, 'leaderboard.html', {'top_users': top_users})
 
 
 def signup(request):
@@ -37,7 +39,7 @@ def signup(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
-            return redirect('play_game')
+            return redirect('play')
     else:
         form = UserCreationForm()
     return render(request, 'registration/signup.html', {'form': form})
@@ -46,6 +48,7 @@ def signup(request):
 def _calculate_score(post_data):
     score = 0
     for key, value in post_data.items():
+        print(key)
         if key.startswith('question_'):
             question_id = int(key.split('_')[1])
             question = Question.objects.get(id=question_id)
