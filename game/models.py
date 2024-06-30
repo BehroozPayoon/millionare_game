@@ -30,12 +30,12 @@ class Answer(models.Model):
         return self.text
 
 
-class GameSession(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+class Game(models.Model):
+    player = models.ForeignKey(User, on_delete=models.CASCADE)
     score = models.IntegerField(default=0)
-    date_played = models.DateTimeField(auto_now_add=True)
+    current_question = models.IntegerField(default=1)
+    completed = models.BooleanField(default=False)
+    questions = models.ManyToManyField(Question)
 
-
-class UserProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    best_score = models.IntegerField(default=0)
+    def __str__(self):
+        return f"Game for {self.player.username}"

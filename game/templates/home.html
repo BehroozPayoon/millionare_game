@@ -1,0 +1,27 @@
+{% extends 'base.html' %} {% block content %}
+<div class="text-center">
+  <h1 class="text-4xl font-bold mb-8">
+    Welcome to Who Wants to Be a Millionaire?
+  </h1>
+  {% if user.is_authenticated %}
+  <p class="text-xl mb-4">Hello, {{ user.username }}!</p>
+  <a
+    href="{% url 'start_game' %}"
+    class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
+    >Start a New Game</a
+  >
+  {% else %}
+  <p class="text-xl mb-4">Please log in or register to play.</p>
+  <a
+    href="{% url 'login' %}"
+    class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mr-2"
+    >Login</a
+  >
+  <a
+    href="{% url 'register' %}"
+    class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded"
+    >Register</a
+  >
+  {% endif %}
+</div>
+{% endblock %}
