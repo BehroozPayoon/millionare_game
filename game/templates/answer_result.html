@@ -6,7 +6,7 @@
   <p class="mt-4 text-lg">Correct answer: {{ correct_answer.text }}</p>
   <p class="mt-4 text-lg">Current score: {{ game.score }}</p>
   <a
-    href="{% url 'play_game' game_id=game.id %}"
+    href="{% url 'play_game' game_id=game.id question_index=question_index|add:1 %}"
     class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mr-2"
     >Next Question</a
   >
