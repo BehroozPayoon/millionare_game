@@ -1,42 +1,12 @@
 from django.shortcuts import render, redirect
 from django.db.models import Count
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import login, authenticate
-from django.contrib.auth.forms import UserCreationForm
 
 from .models import Question, Answer, Game
-from .forms import CustomLoginForm
 
 
 def home(request):
     return render(request, 'home.html')
-
-
-def register(request):
-    if request.method == 'POST':
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            login(request, user)
-            return redirect('home')
-    else:
-        form = UserCreationForm()
-    return render(request, 'auth/register.html', {'form': form})
-
-
-def custom_login(request):
-    if request.method == 'POST':
-        form = CustomLoginForm(request, data=request.POST)
-        if form.is_valid():
-            username = form.cleaned_data.get('username')
-            password = form.cleaned_data.get('password')
-            user = authenticate(username=username, password=password)
-            if user is not None:
-                login(request, user)
-                return redirect('home')
-    else:
-        form = CustomLoginForm()
-    return render(request, 'auth/login.html', {'form': form})
 
 
 @login_required
@@ -67,8 +37,6 @@ def play_game(request, game_id, question_index):
     answers = list(question.answers.all())
 
     if request.method == 'POST':
-        print(
-            f"Question Index is: {question_index} and current index is {game.current_question}")
         return _process_answer(request.POST, question, question_index,
                                game, request)
 
