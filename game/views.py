@@ -1,5 +1,3 @@
-import random
-
 from django.shortcuts import render, redirect
 from django.db.models import Count
 from django.contrib.auth.decorators import login_required
@@ -67,29 +65,36 @@ def play_game(request, game_id):
 
     question = game.questions.all()[game.current_question - 1]
     answers = list(question.answers.all())
-    random.shuffle(answers)
 
     if request.method == 'POST':
-        selected_answer_id = request.POST.get('answer')
-        selected_answer = Answer.objects.get(id=selected_answer_id)
-
-        if selected_answer.is_correct:
-            game.score += question.points
-
-        game.current_question += 1
-        game.save()
-
-        return render(request, 'answer_result.html', {
-            'game': game,
-            'question': question,
-            'selected_answer': selected_answer,
-            'correct_answer': question.answers.get(is_correct=True),
-        })
+        _process_answer(request.POST, question,
+                        game, request)
 
     return render(request, 'play.html', {
         'game': game,
         'question': question,
         'answers': answers,
+    })
+
+
+def _process_answer(post_data, question, game, request):
+    selected_answer_id = post_data.get('answer')
+    selected_answer = Answer.objects.get(id=selected_answer_id)
+    correct_answer = question.answers.get(is_correct=True)
+    question_index = game.current_question
+
+    if selected_answer.is_correct:
+        game.score += question.points
+
+    game.current_question += 1
+    game.save()
+
+    return render(request, 'answer_result.html', {
+        'game': game,
+        'question': question,
+        'selected_answer': selected_answer,
+        'correct_answer': correct_answer,
+        'question_index': question_index,
     })
 
 

@@ -1,21 +1,14 @@
 {% extends 'base.html' %} {% block content %}
 <div class="max-w-2xl mx-auto bg-white p-8 rounded shadow-md">
-  <h1 class="text-2xl font-bold mb-4">
-    Question {{ game.current_question }} of 5
-  </h1>
+  <h1 class="text-2xl font-bold mb-4">Question {{ question_index }} of 5</h1>
   <h2 class="text-xl mb-6">{{ question.text }}</h2>
-  <form method="post">
-    {% csrf_token %} {% for answer in answers %}
-    <button
-      type="submit"
-      name="answer"
-      value="{{ answer.id }}"
-      class="block w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mb-2"
-    >
-      {{ answer.text }}
-    </button>
-    {% endfor %}
-  </form>
+  <p class="mt-4 text-lg">Your answer: {{ selected_answer.text }}</p>
+  <p class="mt-4 text-lg">Correct answer: {{ correct_answer.text }}</p>
   <p class="mt-4 text-lg">Current score: {{ game.score }}</p>
+  <a
+    href="{% url 'play_game' game_id=game.id %}"
+    class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mr-2"
+    >Next Question</a
+  >
 </div>
 {% endblock %}
