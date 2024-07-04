@@ -40,3 +40,9 @@ class Game(models.Model):
 
     def __str__(self):
         return f"Game for {self.player.email}"
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        if self.completed and self.score > self.player.best_score:
+            self.player.best_score = self.score
+            self.player.save()

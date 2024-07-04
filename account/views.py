@@ -1,7 +1,9 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
+
 from .forms import CustomLoginForm, CustomUserCreationForm
+from .models import CustomUser
 
 
 def custom_login(request):
@@ -35,3 +37,10 @@ def register(request):
 def custom_logout(request):
     logout(request)
     return redirect('home')
+
+
+def leaderboard(request):
+    top_users = CustomUser.objects.order_by('-best_score')[:10]
+    return render(request, 'leaderboard.html', {
+        'top_users': top_users
+    })
